@@ -1,6 +1,6 @@
 # Rossmann Sales Insights and Forecasting
 
-This project analyzes historical sales data from Rossmann Pharmaceuticals to generate insights and forecast future sales trends. The project includes data cleaning, exploratory data analysis (EDA), and data visualization to understand key metrics and relationships.
+This project analyzes historical sales data from Rossmann Pharmaceuticals to generate insights and forecast future sales trends. The project includes data cleaning, exploratory data analysis (EDA), and...
 
 ---
 
@@ -48,8 +48,8 @@ This project analyzes historical sales data from Rossmann Pharmaceuticals to gen
 ### Steps
 1. Clone the repository:
    ```bash
-   git clone <repository-url>
-   cd <repository-folder>
+   git clone https://github.com/Tekalig/Rossmann-Sales-Insights-and-Forecasting.git
+   cd Rossmann-Sales-Insights-and-Forecasting
    ```
 
 2. Create and activate a virtual environment:
