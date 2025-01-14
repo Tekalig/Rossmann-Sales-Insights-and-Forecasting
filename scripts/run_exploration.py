@@ -1,7 +1,8 @@
-from src.data_processing import load_data, handle_missing_data, detect_outliers, save_cleaned_data
-from src.eda_analysis import analyze_distributions, compare_sales_during_holidays, plot_time_series
+from src.data_processing import load_data, handle_missing_data, detect_outliers, save_cleaned_data, preprocess_data
+from src.eda_analysis import analyze_distributions, compare_sales_during_holidays, plot_time_series, custom_loss_function, train_model, analyze_predictions
 from src.data_visualization import plot_sales_distribution, check_outlier_plot, plot_sales_behavior, plot_sales_vs_customers, plot_correlation_heatmap, plot_promo_effect, plot_assortment_effect
 from src.logger import setup_logging
+from src.feature_engineering import train_lstm, extract_date_features, serialize_model
 
 def main():
     logger = setup_logging()
@@ -57,6 +58,29 @@ def main():
     logger.info("Plot the effect of assortment type on sales")
 
     logger.info("Task 1 completed successfully.")
+
+    logger.info("Task 2: Training a model to predict sales started.")
+    # Feature Engineering
+    df_features = extract_date_features(df)
+    logger.info("Date features extracted.")
+
+    # Preprocessing
+    df_processed = preprocess_data(df_features)
+    logger.info("Data preprocessed.")
+
+    # Train Model
+    model = train_model(df_processed, 'sales')
+    logger.info("Model trained.")
+
+    # Custom Loss Function
+    loss = custom_loss_function(df_processed['sales'], model.predict(df_processed.drop(columns=['sales'])))
+    logger.info(f"Custom loss: {loss}")
+
+    # Analyze Predictions
+    analyze_predictions(model, df_processed, 'sales')
+    logger.info("Predictions analyzed.")
+
+
 
 if __name__ == "__main__":
     main()
