@@ -1,6 +1,7 @@
 import pandas as pd
 import logging
 import numpy as np
+from sklearn.preprocessing import StandardScaler
 from sklearn.impute import SimpleImputer
 
 def load_data(file_path):
@@ -36,3 +37,28 @@ def detect_outliers(df, column, threshold=3):
 def save_cleaned_data(df, file_path):
     """Saves cleaned data to a file."""
     df.to_csv(file_path, index=False)
+
+def preprocess_data(data):
+    # Handle missing values
+    data.fillna(0, inplace=True)
+
+    # Extract features from datetime columns
+    data['weekday'] = data['date'].dt.weekday
+    data['weekend'] = data['date'].dt.weekday.isin([5, 6]).astype(int)
+    data['days_to_holiday'] = (data['next_holiday'] - data['date']).dt.days
+    data['days_after_holiday'] = (data['date'] - data['last_holiday']).dt.days
+    data['month_period'] = data['date'].dt.day.apply(lambda x: 'start' if x <= 10 else 'mid' if x <= 20 else 'end')
+
+    # Generate more features (customizable)
+    data['is_month_start'] = data['date'].dt.is_month_start.astype(int)
+    data['is_month_end'] = data['date'].dt.is_month_end.astype(int)
+
+    # One-hot encode categorical features
+    data = pd.get_dummies(data, columns=['month_period'], drop_first=True)
+
+    # Scale numeric features
+    scaler = StandardScaler()
+    numeric_cols = data.select_dtypes(include=np.number).columns
+    data[numeric_cols] = scaler.fit_transform(data[numeric_cols])
+
+    return data
